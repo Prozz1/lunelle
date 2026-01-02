@@ -112,8 +112,8 @@ export default function AboutPage() {
                 </div>
                 <div className="grid gap-6 md:grid-cols-2">
                   {values.map((value, index) => (
-                    <Card key={index} className="border-0 shadow-soft">
-                      <CardContent className="p-6">
+                    <Card key={index} className="border-0 shadow-soft bg-white">
+                      <CardContent className="p-6 bg-white">
                         <h3 className="font-serif text-xl font-semibold mb-3">{value.title}</h3>
                         <p className="text-muted-foreground">{value.description}</p>
                       </CardContent>
