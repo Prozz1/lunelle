@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ProductGallery } from '@/components/product/ProductGallery';
-import { ProductGrid } from '@/components/product/ProductGrid';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
@@ -28,7 +27,6 @@ import type { ShopifyVariant } from '@/types/shopify';
  */
 export default function ProductDetailPage() {
   const { productHandle } = useParams<{ productHandle: string }>();
-  const navigate = useNavigate();
   const { product, loading, error } = useShopifyProduct(productHandle);
   const { addItem } = useCart();
 

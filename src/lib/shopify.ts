@@ -536,6 +536,7 @@ function transformProduct(shopifyProduct: ShopifyProduct): Product {
     id: shopifyProduct.id,
     title: shopifyProduct.title,
     description: shopifyProduct.description,
+    descriptionHtml: shopifyProduct.descriptionHtml,
     handle: shopifyProduct.handle,
     images,
     variants,

@@ -130,6 +130,7 @@ export interface Product {
   id: string;
   title: string;
   description: string;
+  descriptionHtml?: string;
   handle: string;
   images: ShopifyImage[];
   variants: ShopifyVariant[];

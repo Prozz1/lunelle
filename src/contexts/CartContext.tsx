@@ -1,4 +1,4 @@
-import React, { createContext, useContext, ReactNode } from 'react';
+import { createContext, useContext, ReactNode } from 'react';
 import { useShopifyCart } from '../hooks/useShopifyCart';
 import type { ShopifyCart, ShopifyCartLineItem } from '../types/shopify';
 

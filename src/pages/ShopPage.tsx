@@ -8,8 +8,6 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { SEO } from '@/components/ui/SEO';
 import { useShopifyProducts } from '@/hooks/useShopifyProducts';
-import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
-import type { Product } from '@/types/shopify';
 
 type SortOption = 'newest' | 'price-low' | 'price-high' | 'name';
 

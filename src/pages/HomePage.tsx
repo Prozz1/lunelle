@@ -3,10 +3,8 @@ import { Link } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent } from '@/components/ui/card';
 import { NewsletterForm } from '@/components/forms/NewsletterForm';
 import { SEO } from '@/components/ui/SEO';
-import { useShopifyCollections } from '@/hooks/useShopifyCollections';
 import { useShopifyProducts } from '@/hooks/useShopifyProducts';
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner';
 import { ProductCard } from '@/components/product/ProductCard';
@@ -22,7 +20,6 @@ import { ProductCard } from '@/components/product/ProductCard';
  * - Instagram feed placeholder
  */
 export default function HomePage() {
-  const { collections, loading: collectionsLoading } = useShopifyCollections(3);
   const { products: topProducts, loading: productsLoading } = useShopifyProducts({ first: 3 });
   
   // #region agent log
