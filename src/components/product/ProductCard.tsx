@@ -22,6 +22,18 @@ export function ProductCard({ product, className }: ProductCardProps) {
     currency: product.currencyCode || 'USD',
   }).format(price);
 
+  // Extract available sizes from variants
+  const availableSizes = new Set<string>();
+  product.variants.forEach((variant) => {
+    variant.selectedOptions.forEach((option) => {
+      // Check if this is a size option (case-insensitive)
+      if (option.name.toLowerCase() === 'size') {
+        availableSizes.add(option.value);
+      }
+    });
+  });
+  const sizesArray = Array.from(availableSizes).sort();
+
   return (
     <Link
       to={`/shop/${product.handle}`}
@@ -54,9 +66,14 @@ export function ProductCard({ product, className }: ProductCardProps) {
           <h3 className="font-serif text-lg font-semibold text-foreground mb-1 line-clamp-2">
             {product.title}
           </h3>
-          <p className="text-sm font-medium text-lunelle-taupe">
+          <p className="text-sm font-medium text-lunelle-taupe mb-1">
             {formattedPrice}
           </p>
+          {sizesArray.length > 0 && (
+            <p className="text-xs text-muted-foreground">
+              Sizes: {sizesArray.join(', ')}
+            </p>
+          )}
         </CardContent>
       </Card>
     </Link>

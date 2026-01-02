@@ -39,7 +39,13 @@ export function CartItem({ item, className }: CartItemProps) {
     }
   };
 
+  // Build variant title from selectedOptions, filtering out "Default Title"
   const variantTitle = item.merchandise.selectedOptions
+    .filter((option) => {
+      // Filter out "Default Title" and empty values
+      const value = option.value?.trim().toLowerCase();
+      return value && value !== 'default title' && value !== 'title';
+    })
     .map((option) => `${option.name}: ${option.value}`)
     .join(', ');
 
