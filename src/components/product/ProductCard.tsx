@@ -40,7 +40,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
       className={cn('group block', className)}
       aria-label={`View ${product.title}`}
     >
-      <Card className="overflow-hidden border-0 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1">
+      <Card className="overflow-hidden border-0 shadow-soft hover:shadow-soft-lg transition-all duration-300 hover:-translate-y-1 bg-lunelle-cream">
         <div className="relative aspect-square overflow-hidden bg-lunelle-cream">
           {firstImage ? (
             <img
@@ -62,7 +62,7 @@ export function ProductCard({ product, className }: ProductCardProps) {
             </div>
           )}
         </div>
-        <CardContent className="p-4">
+        <CardContent className="p-4 bg-lunelle-cream">
           <h3 className="font-serif text-lg font-semibold text-foreground mb-1 line-clamp-2">
             {product.title}
           </h3>
