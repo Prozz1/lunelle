@@ -20,7 +20,7 @@ export default {
         // Lunelle brand colors
         'lunelle-pink': '#d4b5b0',
         'lunelle-blush': '#f5e6e8',
-        'lunelle-cream': '#f8f6f3',
+        'lunelle-cream': '#F6F3EE',
         'lunelle-taupe': '#a08d85',
         background: 'hsl(var(--background))',
         foreground: 'hsl(var(--foreground))',

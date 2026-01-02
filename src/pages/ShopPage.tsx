@@ -1,13 +1,15 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ProductGrid } from '@/components/product/ProductGrid';
 import { FilterSidebar, type FilterOptions } from '@/components/product/FilterSidebar';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Input } from '@/components/ui/input';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
 import { SEO } from '@/components/ui/SEO';
 import { useShopifyProducts } from '@/hooks/useShopifyProducts';
+import { Search } from 'lucide-react';
 
 type SortOption = 'newest' | 'price-low' | 'price-high' | 'name';
 
@@ -23,12 +25,21 @@ type SortOption = 'newest' | 'price-low' | 'price-high' | 'name';
 export default function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const categoryFromUrl = searchParams.get('category') || undefined;
+  const searchFromUrl = searchParams.get('search') || '';
 
   const [filters, setFilters] = useState<FilterOptions>({
     category: categoryFromUrl,
   });
   const [sortOption, setSortOption] = useState<SortOption>('newest');
+  const [searchQuery, setSearchQuery] = useState(searchFromUrl);
   const [isMobile] = useState(window.innerWidth < 768);
+
+  // Update search query when URL param changes
+  useEffect(() => {
+    if (searchFromUrl !== searchQuery) {
+      setSearchQuery(searchFromUrl);
+    }
+  }, [searchFromUrl, searchQuery]);
 
   // Build query for Shopify
   // NOTE: Using product_type filter - this must match the productType field in Shopify
@@ -63,9 +74,22 @@ export default function ShopPage() {
     }
   }, [products, sortOption]);
 
-  // Filter by price and color (client-side since Shopify query has limitations)
+  // Filter by price, color, and search query (client-side since Shopify query has limitations)
   const filteredProducts = useMemo(() => {
     let filtered = sortedProducts;
+
+    // Search filtering
+    if (searchQuery.trim()) {
+      const query = searchQuery.toLowerCase().trim();
+      filtered = filtered.filter((product) => {
+        const titleMatch = product.title.toLowerCase().includes(query);
+        const descriptionMatch = product.description?.toLowerCase().includes(query) || false;
+        const productTypeMatch = product.productType?.toLowerCase().includes(query) || false;
+        const handleMatch = product.handle.toLowerCase().includes(query);
+        
+        return titleMatch || descriptionMatch || productTypeMatch || handleMatch;
+      });
+    }
 
     if (filters.priceMin !== undefined || filters.priceMax !== undefined) {
       filtered = filtered.filter((product) => {
@@ -76,11 +100,32 @@ export default function ShopPage() {
       });
     }
 
-    // Note: Color filtering would need to be implemented based on product tags or variants
-    // This is a placeholder for future implementation
+    // Color filtering based on product tags and variant selectedOptions
+    if (filters.colors && filters.colors.length > 0) {
+      filtered = filtered.filter((product) => {
+        // Check product tags for color
+        const productTags = product.productType?.toLowerCase() || '';
+        const hasColorInTags = filters.colors!.some((color) =>
+          productTags.includes(color.toLowerCase())
+        );
+
+        // Check variant selectedOptions for color
+        const hasColorInVariants = product.variants.some((variant) =>
+          variant.selectedOptions.some((option) =>
+            filters.colors!.some((color) =>
+              option.value.toLowerCase().includes(color.toLowerCase()) ||
+              (option.name.toLowerCase() === 'color' &&
+              option.value.toLowerCase().includes(color.toLowerCase()))
+            )
+          )
+        );
+
+        return hasColorInTags || hasColorInVariants;
+      });
+    }
 
     return filtered;
-  }, [sortedProducts, filters.priceMin, filters.priceMax]);
+  }, [sortedProducts, searchQuery, filters.priceMin, filters.priceMax, filters.colors]);
 
   const handleFiltersChange = (newFilters: FilterOptions) => {
     setFilters(newFilters);
@@ -123,9 +168,32 @@ export default function ShopPage() {
               <h1 className="font-serif text-4xl font-semibold text-foreground md:text-5xl mb-4">
                 Shop
               </h1>
-              <p className="text-muted-foreground">
+              <p className="text-muted-foreground mb-6">
                 {filteredProducts.length} {filteredProducts.length === 1 ? 'product' : 'products'} found
               </p>
+              
+              {/* Search Bar */}
+              <div className="relative max-w-md">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <Input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => {
+                    const newQuery = e.target.value;
+                    setSearchQuery(newQuery);
+                    // Update URL without page reload
+                    if (newQuery.trim()) {
+                      setSearchParams({ ...Object.fromEntries(searchParams), search: newQuery });
+                    } else {
+                      const newParams = new URLSearchParams(searchParams);
+                      newParams.delete('search');
+                      setSearchParams(newParams);
+                    }
+                  }}
+                  className="pl-10"
+                />
+              </div>
             </div>
 
             {/* Filters and Sort Bar */}

@@ -1,9 +1,10 @@
-import { Link, useLocation } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { Menu, ShoppingBag, Search } from 'lucide-react';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { Input } from '@/components/ui/input';
 import { useCart } from '@/contexts/CartContext';
 import { cn } from '@/lib/utils';
 
@@ -12,10 +13,30 @@ import { cn } from '@/lib/utils';
  */
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showSearch, setShowSearch] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
   const location = useLocation();
+  const navigate = useNavigate();
   const { itemCount } = useCart();
 
   const isActive = (path: string) => location.pathname === path;
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+      setShowSearch(false);
+    }
+  };
+
+  const handleSearchClick = () => {
+    if (showSearch && searchQuery.trim()) {
+      navigate(`/shop?search=${encodeURIComponent(searchQuery.trim())}`);
+      setSearchQuery('');
+    }
+    setShowSearch(!showSearch);
+  };
 
   const navLinks = [
     { path: '/', label: 'Home' },
@@ -56,15 +77,38 @@ export function Header() {
 
         {/* Right side actions */}
         <div className="flex items-center space-x-4">
-          {/* Search icon - placeholder for future search functionality */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hidden md:flex"
-            aria-label="Search"
-          >
-            <Search className="h-5 w-5" aria-hidden="true" />
-          </Button>
+          {/* Search */}
+          <div className="hidden md:flex items-center">
+            {showSearch ? (
+              <form onSubmit={handleSearch} className="flex items-center space-x-2">
+                <Input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  onBlur={() => {
+                    if (!searchQuery.trim()) {
+                      setShowSearch(false);
+                    }
+                  }}
+                  autoFocus
+                  className="w-64"
+                />
+                <Button type="submit" variant="ghost" size="icon" aria-label="Search">
+                  <Search className="h-5 w-5" aria-hidden="true" />
+                </Button>
+              </form>
+            ) : (
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={handleSearchClick}
+                aria-label="Search"
+              >
+                <Search className="h-5 w-5" aria-hidden="true" />
+              </Button>
+            )}
+          </div>
 
           {/* Cart */}
           <Link to="/cart" className="relative" aria-label="Shopping cart">

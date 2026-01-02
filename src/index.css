@@ -11,7 +11,7 @@
 
   color-scheme: light;
   color: #1a1a1a;
-  background-color: #f8f6f3;
+  background-color: #F6F3EE;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -23,13 +23,13 @@
 :root {
   --lunelle-pink: #d4b5b0;
   --lunelle-blush: #f5e6e8;
-  --lunelle-cream: #f8f6f3;
+  --lunelle-cream: #F6F3EE;
   --lunelle-taupe: #a08d85;
 }
 
 @layer base {
   :root {
-    --background: 248 246 243; /* lunelle-cream */
+    --background: 246 243 238; /* lunelle-cream #F6F3EE */
     --foreground: 26 26 26;
     --card: 255 255 255;
     --card-foreground: 26 26 26;
