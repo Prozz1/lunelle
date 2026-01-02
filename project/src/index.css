@@ -1,0 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: #1a1a1a;
+  background-color: #f8f6f3;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Lunelle brand color variables */
+:root {
+  --lunelle-pink: #d4b5b0;
+  --lunelle-blush: #f5e6e8;
+  --lunelle-cream: #f8f6f3;
+  --lunelle-taupe: #a08d85;
+}
+
+@layer base {
+  :root {
+    --background: 248 246 243; /* lunelle-cream */
+    --foreground: 26 26 26;
+    --card: 255 255 255;
+    --card-foreground: 26 26 26;
+    --popover: 255 255 255;
+    --popover-foreground: 26 26 26;
+    --primary: 212 181 176; /* lunelle-pink */
+    --primary-foreground: 255 255 255;
+    --secondary: 245 230 232; /* lunelle-blush */
+    --secondary-foreground: 26 26 26;
+    --muted: 245 230 232;
+    --muted-foreground: 20 8 50; /* Warm dark gray-taupe for better contrast (HSL: hue=20°, sat=8%, light=50%) */
+    --accent: 245 230 232;
+    --accent-foreground: 26 26 26;
+    --destructive: 239 68 68;
+    --destructive-foreground: 255 255 255;
+    --border: 229 229 229;
+    --input: 229 229 229;
+    --ring: 212 181 176; /* lunelle-pink for focus rings */
+    --radius: 0.5rem;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    height: 100%;
+  }
+  body {
+    @apply bg-lunelle-cream text-foreground;
+    margin: 0;
+    min-width: 320px;
+    min-height: 100vh;
+  }
+  #root {
+    min-height: 100vh;
+    width: 100%;
+    max-width: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    text-align: left !important;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Playfair Display', serif;
+    font-weight: 600;
+  }
+}
+
+@layer utilities {
+  .transition-elegant {
+    transition: all 300ms ease-in-out;
+  }
+  
+  .floral-pattern {
+    background-image: 
+      radial-gradient(circle at 20% 50%, rgba(212, 181, 176, 0.03) 0%, transparent 50%),
+      radial-gradient(circle at 80% 80%, rgba(245, 230, 232, 0.03) 0%, transparent 50%);
+  }
+}
