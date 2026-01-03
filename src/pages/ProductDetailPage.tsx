@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { ProductGallery } from '@/components/product/ProductGallery';
+import { ProductCard } from '@/components/product/ProductCard';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from '@/components/ui/breadcrumb';
@@ -13,7 +14,8 @@ import { useShopifyProduct } from '@/hooks/useShopifyProduct';
 import { useCart } from '@/contexts/CartContext';
 import { toast } from 'sonner';
 import { ShoppingBag, Minus, Plus } from 'lucide-react';
-import type { ShopifyVariant } from '@/types/shopify';
+import type { ShopifyVariant, Product } from '@/types/shopify';
+import { getProducts } from '@/lib/shopify';
 
 /**
  * ProductDetailPage component
@@ -33,6 +35,7 @@ export default function ProductDetailPage() {
   const [selectedVariant, setSelectedVariant] = useState<ShopifyVariant | null>(null);
   const [quantity, setQuantity] = useState(1);
   const [isAddingToCart, setIsAddingToCart] = useState(false);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
 
   // Set default variant when product loads
   useEffect(() => {
@@ -40,6 +43,23 @@ export default function ProductDetailPage() {
       setSelectedVariant(product.variants[0]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [product]);
+
+  // Fetch related products
+  useEffect(() => {
+    if (product) {
+      getProducts({ first: 8 })
+        .then(({ products }) => {
+          // Filter out current product and limit to 4
+          const filtered = products
+            .filter((p) => p.id !== product.id)
+            .slice(0, 4);
+          setRelatedProducts(filtered);
+        })
+        .catch((error) => {
+          console.error('Error fetching related products:', error);
+        });
+    }
   }, [product]);
 
   if (loading) {
@@ -259,16 +279,19 @@ export default function ProductDetailPage() {
               </div>
             </div>
 
-            {/* Related Products Section - Placeholder */}
-            <div className="mt-16">
-              <h2 className="font-serif text-2xl font-semibold mb-8 text-center">
-                You may also like
-              </h2>
-              {/* TODO: Implement related products when available from Shopify */}
-              <div className="text-center text-muted-foreground py-8">
-                Related products will appear here
+            {/* Related Products Section */}
+            {relatedProducts.length > 0 && (
+              <div className="mt-16">
+                <h2 className="font-serif text-2xl font-semibold mb-8 text-center">
+                  You may also like
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {relatedProducts.map((relatedProduct) => (
+                    <ProductCard key={relatedProduct.id} product={relatedProduct} />
+                  ))}
+                </div>
               </div>
-            </div>
+            )}
           </div>
         </main>
 
