@@ -187,31 +187,33 @@ export default function ProductDetailPage() {
                 <Separator />
 
                 {/* Variant Selectors */}
-                {Object.entries(variantOptions).map(([optionName, optionValues]) => (
-                  <div key={optionName}>
-                    <label className="text-sm font-medium mb-2 block">
-                      {optionName}
-                    </label>
-                    <Select
-                      value={
-                        currentVariant.selectedOptions.find((opt) => opt.name === optionName)
-                          ?.value || ''
-                      }
-                      onValueChange={(value) => handleVariantSelect(optionName, value)}
-                    >
-                      <SelectTrigger className="w-full">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array.from(optionValues).map((value) => (
-                          <SelectItem key={value} value={value}>
-                            {value}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                ))}
+                {Object.keys(variantOptions).length > 0 ? (
+                  Object.entries(variantOptions).map(([optionName, optionValues]) => (
+                    <div key={optionName}>
+                      <label className="text-sm font-medium mb-2 block">
+                        {optionName}
+                      </label>
+                      <Select
+                        value={
+                          currentVariant.selectedOptions.find((opt) => opt.name === optionName)
+                            ?.value || ''
+                        }
+                        onValueChange={(value) => handleVariantSelect(optionName, value)}
+                      >
+                        <SelectTrigger className="w-full bg-white">
+                          <SelectValue placeholder={`Select ${optionName}`} />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from(optionValues).map((value) => (
+                            <SelectItem key={value} value={value}>
+                              {value}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ))
+                ) : null}
 
                 {/* Quantity Selector */}
                 <div>
