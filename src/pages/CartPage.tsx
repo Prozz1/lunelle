@@ -100,7 +100,7 @@ export default function CartPage() {
               <div className="grid gap-8 lg:grid-cols-3">
                 {/* Cart Items */}
                 <div className="lg:col-span-2">
-                  <div className="rounded-lg border bg-card p-6">
+                  <div className="rounded-lg border bg-white p-6">
                     {cartItems.map((item) => (
                       <CartItem key={item.id} item={item} />
                     ))}
@@ -114,11 +114,11 @@ export default function CartPage() {
 
                 {/* Order Summary */}
                 <div className="lg:col-span-1">
-                  <Card>
+                  <Card className="bg-white">
                     <CardHeader>
                       <CardTitle>Order Summary</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-4">
+                    <CardContent className="space-y-4 bg-white">
                       <div className="flex justify-between text-sm">
                         <span className="text-muted-foreground">Subtotal</span>
                         <span className="font-medium">{formattedSubtotal}</span>

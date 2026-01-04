@@ -104,6 +104,7 @@ export function Header() {
                 size="icon"
                 onClick={handleSearchClick}
                 aria-label="Search"
+                className="hover:bg-lunelle-blush/30"
               >
                 <Search className="h-5 w-5" aria-hidden="true" />
               </Button>
